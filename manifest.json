@@ -1,0 +1,18 @@
+{
+  "name": "Tic-Tac-Toe Machine",
+  "short_name": "TicTacToe",
+  "description": "Advanced, responsive Tic-Tac-Toe game with Minimax AI, house rules, and multiplayer.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#0F172A",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "64x64 128x128 256x256 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
