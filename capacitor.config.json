@@ -1,0 +1,8 @@
+{
+  "appId": "com.tictactoe.machine",
+  "appName": "Tic-Tac-Toe Machine",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

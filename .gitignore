@@ -21,3 +21,4 @@ desktop.ini
 # Log and temp files
 *.log
 scratch/
+node_modules/

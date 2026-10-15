@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="8" fill="#0F172A"/>
+  <line x1="22" y1="10" x2="22" y2="54" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
+  <line x1="42" y1="10" x2="42" y2="54" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
+  <line x1="10" y1="22" x2="54" y2="22" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
+  <line x1="10" y1="42" x2="54" y2="42" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
+  <!-- Sharp X -->
+  <line x1="13" y1="13" x2="19" y2="19" stroke="#2563EB" stroke-width="2.5" stroke-linecap="square"/>
+  <line x1="19" y1="13" x2="13" y2="19" stroke="#2563EB" stroke-width="2.5" stroke-linecap="square"/>
+  <!-- Sharp O -->
+  <circle cx="32" cy="32" r="4.5" fill="none" stroke="#E11D48" stroke-width="2.5"/>
+  <!-- Delta / Win Indicator -->
+  <polygon points="51,51 45,51 48,45" fill="#10B981"/>
+</svg>
