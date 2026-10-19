@@ -4,7 +4,7 @@
   "description": "An advanced, responsive desktop Tic-Tac-Toe game built with **Java 23** and **JavaFX 22**, adhering to clean desktop UI principles (crisp 4px/6px geometry, no purple gradients, and zero AI-slop design).",
   "main": "game.js",
   "scripts": {
-    "build": "node -e \"const fs=require('fs'); fs.mkdirSync('www', {recursive:true}); ['index.html','style.css','game.js','manifest.json','favicon.svg','icon-192.png','icon-512.png','privacy.html','terms.html','sw.js','screenshot-mobile.png','screenshot-desktop.png'].forEach(f => { if(fs.existsSync(f)) fs.copyFileSync(f, 'www/' + f); });\" && npx cap copy android"
+    "build": "node build.js && npx cap copy android"
   },
   "repository": {
     "type": "git",

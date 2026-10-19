@@ -56,7 +56,9 @@ jobs:
         run: npm install
 
       - name: Sync Web Assets to Android
-        run: npm run build
+        run: |
+          node build.js
+          npx cap sync android
 
       - name: Grant Execute Permission to Gradle Wrapper
         run: chmod +x android/gradlew
