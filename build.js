@@ -2,9 +2,13 @@ const fs = require('fs');
 const path = require('path');
 
 const wwwDir = path.join(__dirname, 'www');
-if (!fs.existsSync(wwwDir)) {
-  fs.mkdirSync(wwwDir, { recursive: true });
-}
+const androidAssetsDir = path.join(__dirname, 'android', 'app', 'src', 'main', 'assets', 'public');
+
+[wwwDir, androidAssetsDir].forEach(dir => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+});
 
 const files = [
   'index.html',
@@ -23,10 +27,10 @@ const files = [
 
 files.forEach(file => {
   const src = path.join(__dirname, file);
-  const dest = path.join(wwwDir, file);
   if (fs.existsSync(src)) {
-    fs.copyFileSync(src, dest);
+    fs.copyFileSync(src, path.join(wwwDir, file));
+    fs.copyFileSync(src, path.join(androidAssetsDir, file));
   }
 });
 
-console.log('Web assets successfully copied to www/');
+console.log('Web assets successfully copied to www/ and android/assets/public/');

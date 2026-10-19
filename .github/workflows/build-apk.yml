@@ -52,13 +52,8 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Sync Web Assets to Android
-        run: |
-          node build.js
-          npx cap sync android
+      - name: Sync Web Assets to Android Project
+        run: node build.js
 
       - name: Grant Execute Permission to Gradle Wrapper
         run: chmod +x android/gradlew
