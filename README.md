@@ -1,6 +1,23 @@
 # TIC-TAC-TOE MACHINE
 
-An advanced, responsive desktop Tic-Tac-Toe game built with **Java 23** and **JavaFX 22**, adhering to clean desktop UI principles (crisp 4px/6px geometry, no purple gradients, and zero AI-slop design).
+An advanced, responsive Tic-Tac-Toe game available across **Mobile (Android APK)**, **Desktop (Java JAR)**, and **Web (PWA)**, adhering to clean UI principles (crisp 4px/6px geometry, no purple gradients, and zero AI-slop design).
+
+---
+
+## 🚀 Downloads & Play Online
+
+| Platform | Format | Link |
+| :--- | :--- | :--- |
+| 📱 **Android Phone** | Native APK | [**Download TicTacToe-Machine-Android.apk**](https://github.com/Sidharth2805/TIC-TAC-TOE/releases/download/v1.0.0/TicTacToe-Machine-Android.apk) |
+| 💻 **Desktop (Windows/Mac/Linux)** | Executable JAR | [**Download TicTacToe-Machine-v1.0.jar**](https://github.com/Sidharth2805/TIC-TAC-TOE/releases/download/v1.0.0/TicTacToe-Machine-v1.0.jar) |
+| 🌐 **Play in Browser (PWA)** | Instant Web Play | [**Play Live on GitHub Pages**](https://Sidharth2805.github.io/TIC-TAC-TOE/) |
+| 📦 **All Releases** | GitHub Releases | [**View Release v1.0.0 on GitHub**](https://github.com/Sidharth2805/TIC-TAC-TOE/releases/tag/v1.0.0) |
+
+### 📱 Installing the Android APK
+1. Download the `.apk` file onto your phone via the link above.
+2. Tap the file in your downloads folder or browser notification.
+3. If prompted with *"Install unknown apps"*, tap **Settings** and toggle **"Allow from this source"**.
+4. Tap **Install** to enjoy the full offline game with sound effects, house rules, and touch-optimized controls!
 
 ---
 
