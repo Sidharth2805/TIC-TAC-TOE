@@ -17,7 +17,7 @@
     "url": "https://github.com/Sidharth2805/TIC-TAC-TOE/issues"
   },
   "homepage": "https://github.com/Sidharth2805/TIC-TAC-TOE#readme",
-  "devDependencies": {
+  "dependencies": {
     "@capacitor/android": "^8.5.3",
     "@capacitor/cli": "^8.5.3",
     "@capacitor/core": "^8.5.3"
