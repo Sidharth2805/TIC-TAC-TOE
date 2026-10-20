@@ -443,6 +443,37 @@ input[type="text"]:disabled {
   text-shadow: 0 0 14px rgba(16, 185, 129, 0.35);
 }
 
+/* HeatMap Prediction Styles */
+.cell.heat-cell {
+  position: relative;
+  background-color: rgba(37, 99, 235, var(--heat-alpha, 0.08));
+}
+.cell.heat-cell .heat-val {
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 2.8vw, 15px);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  opacity: 0.85;
+  pointer-events: none;
+}
+.cell.heat-cell.heat-best {
+  border-color: var(--accent-win);
+  background-color: rgba(16, 185, 129, 0.16);
+}
+.cell.heat-cell.heat-best .heat-val {
+  color: var(--accent-win);
+  font-weight: 800;
+  opacity: 1;
+}
+.cell.heat-cell.heat-worst {
+  border-color: rgba(225, 29, 72, 0.35);
+  background-color: rgba(225, 29, 72, 0.05);
+}
+.cell.heat-cell.heat-worst .heat-val {
+  color: rgba(225, 29, 72, 0.75);
+}
+
 .cell.hazard {
   border-color: var(--hazard-border);
   background-color: var(--hazard-bg);

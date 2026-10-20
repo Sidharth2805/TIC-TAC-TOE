@@ -68,6 +68,7 @@
     soundOn: true,
     power: true,
     animations: true,
+    heatmap: true,
     player1Name: 'Player 1',
     player2Name: 'Player 2',
     player3Name: 'Player 3'
@@ -103,6 +104,8 @@
     const savedAnim = localStorage.getItem('tictactoe_animations');
     if (savedAnim !== null) config.animations = savedAnim === 'true';
     if (!config.animations) document.documentElement.setAttribute('data-animations', 'off');
+    const savedHeat = localStorage.getItem('tictactoe_heatmap');
+    if (savedHeat !== null) config.heatmap = savedHeat === 'true';
   } catch (e) {}
 
   function saveStats() {
@@ -162,6 +165,105 @@
 
   function isBoardFull(board) {
     return board.every(cell => cell !== null);
+  }
+
+  // --- HeatMap Prediction Engine (Matching Java BoardEvaluator) ---
+  const linesCache = {};
+  function getWinLines(size, winLen) {
+    const key = `${size}_${winLen}`;
+    if (linesCache[key]) return linesCache[key];
+
+    const lines = [];
+    const directions = [
+      [0, 1],   // horizontal
+      [1, 0],   // vertical
+      [1, 1],   // diagonal down-right
+      [1, -1]   // diagonal down-left
+    ];
+
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        for (const [dr, dc] of directions) {
+          const line = [];
+          let valid = true;
+          for (let step = 0; step < winLen; step++) {
+            const nr = r + dr * step;
+            const nc = c + dc * step;
+            if (nr < 0 || nr >= size || nc < 0 || nc >= size) {
+              valid = false;
+              break;
+            }
+            line.push(nr * size + nc);
+          }
+          if (valid) lines.push(line);
+        }
+      }
+    }
+
+    linesCache[key] = lines;
+    return lines;
+  }
+
+  function evaluateHeatScore(board, size, winLen, activeSym, otherSym) {
+    let score = 0;
+    const lines = getWinLines(size, winLen);
+    for (const line of lines) {
+      let aiCount = 0;
+      let humanCount = 0;
+      let hasHazard = false;
+      for (const idx of line) {
+        const sym = board[idx];
+        if (sym === activeSym) aiCount++;
+        else if (sym === otherSym) humanCount++;
+        else if (sym === '■') hasHazard = true;
+      }
+      if (hasHazard || (aiCount > 0 && humanCount > 0)) continue;
+      if (aiCount > 0) score += Math.pow(10, aiCount);
+      if (humanCount > 0) score -= Math.pow(10, humanCount);
+    }
+    return score;
+  }
+
+  function computeHeatmap() {
+    if (!config.heatmap || state.gameOver || !config.power) return null;
+
+    const curSym = state.turnOrder[state.currentPlayerIdx];
+    let otherSym = null;
+    for (const s of state.turnOrder) {
+      if (s !== curSym) {
+        otherSym = s;
+        break;
+      }
+    }
+    if (!otherSym) otherSym = (curSym === 'X' ? 'O' : 'X');
+
+    const heatScores = {};
+    let maxScore = -Infinity;
+    let minScore = Infinity;
+
+    for (let i = 0; i < state.board.length; i++) {
+      if (!state.board[i]) {
+        const copy = state.board.slice();
+        copy[i] = curSym;
+        const score = evaluateHeatScore(copy, config.gridSize, config.winLength, curSym, otherSym);
+        heatScores[i] = score;
+        if (score > maxScore) maxScore = score;
+        if (score < minScore) minScore = score;
+      }
+    }
+
+    const heatProbs = {};
+    for (const idx in heatScores) {
+      const score = heatScores[idx];
+      const prob = 1.0 / (1.0 + Math.exp(-score / 150.0));
+      heatProbs[idx] = {
+        prob,
+        pct: Math.round(prob * 100),
+        isBest: score === maxScore,
+        isWorst: score === minScore && minScore !== maxScore
+      };
+    }
+    return heatProbs;
   }
 
   // --- Minimax AI ---
@@ -508,6 +610,8 @@
     grid.style.gridTemplateColumns = `repeat(${config.gridSize}, 1fr)`;
     grid.setAttribute('data-grid-size', config.gridSize);
 
+    const heatData = computeHeatmap();
+
     for (let i = 0; i < state.board.length; i++) {
       const cell = document.createElement('div');
       cell.className = 'cell';
@@ -527,6 +631,19 @@
         cell.classList.add('hazard', 'filled');
         cell.innerText = '■';
         cell.title = 'HAZARD: Blocked wall cell (Cannot be played)';
+      } else if (heatData && heatData[i]) {
+        const heat = heatData[i];
+        cell.classList.add('heat-cell');
+        if (heat.isBest) cell.classList.add('heat-best');
+        else if (heat.isWorst) cell.classList.add('heat-worst');
+
+        const badge = document.createElement('span');
+        badge.className = 'heat-val';
+        badge.innerText = heat.pct + '%';
+        cell.appendChild(badge);
+        cell.title = `Evaluated Probability: ${heat.pct}%`;
+        const alpha = (heat.prob * 0.16).toFixed(2);
+        cell.style.setProperty('--heat-alpha', alpha);
       }
 
       if (state.winningCells.includes(i)) {
@@ -652,6 +769,28 @@
       btnPower.innerText = config.power ? 'POWER: ON' : 'POWER: OFF';
       updateUI();
     });
+
+    // Heatmap Toggle
+    const btnHeatmap = document.getElementById('btnHeatmap');
+    if (btnHeatmap) {
+      btnHeatmap.innerText = config.heatmap ? 'HEATMAP: ON' : 'HEATMAP: OFF';
+      if (config.heatmap) {
+        btnHeatmap.classList.add('active');
+      } else {
+        btnHeatmap.classList.remove('active');
+      }
+      btnHeatmap.addEventListener('click', () => {
+        config.heatmap = !config.heatmap;
+        try { localStorage.setItem('tictactoe_heatmap', config.heatmap); } catch (e) {}
+        btnHeatmap.innerText = config.heatmap ? 'HEATMAP: ON' : 'HEATMAP: OFF';
+        if (config.heatmap) {
+          btnHeatmap.classList.add('active');
+        } else {
+          btnHeatmap.classList.remove('active');
+        }
+        renderBoard();
+      });
+    }
 
     // Animations Toggle
     const btnAnimations = document.getElementById('btnAnimations');
