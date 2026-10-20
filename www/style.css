@@ -437,17 +437,117 @@ input[type="text"]:disabled {
   border: 1px solid var(--border);
 }
 
-/* Mobile Segmented Drawer */
-.mobile-tabs {
-  display: none;
-  gap: 8px;
-  padding: 0 14px 10px 14px;
+/* Accordion Component */
+.accordion-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--term-bg);
+  overflow: hidden;
+  margin-top: 4px;
 }
-.mobile-tabs button {
-  flex: 1;
-  padding: 8px;
+.accordion-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease;
+}
+.accordion-header:hover {
+  background-color: var(--btn-hover);
+}
+.accordion-chevron {
+  font-size: 11px;
+  color: var(--text-dim);
+  transition: transform 0.2s ease;
+}
+.accordion-item.open .accordion-chevron {
+  transform: rotate(180deg);
+}
+.accordion-body {
+  display: none;
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+}
+.accordion-item.open .accordion-body {
+  display: block;
+}
+
+/* Header Settings Button */
+.btn-settings-header {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background-color: var(--btn-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.btn-settings-header:hover {
+  background-color: var(--btn-hover);
+  border-color: var(--accent-x);
+}
+
+/* Modal Backdrop */
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+}
+.modal-backdrop.open {
+  display: block;
+}
+
+/* Settings Modal Header / Footer Controls */
+.settings-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+.settings-modal-title {
   font-weight: 700;
   font-size: 12px;
+  letter-spacing: 0.5px;
+  color: var(--text);
+}
+.settings-modal-close {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.settings-modal-close:hover {
+  background-color: var(--btn-hover);
+  border-color: var(--accent-o);
+}
+.settings-modal-footer {
+  margin-top: 6px;
 }
 
 /* Status Bar */
@@ -472,36 +572,66 @@ input[type="text"]:disabled {
 }
 
 /* Responsive Breakpoints */
-@media (max-width: 960px) {
-  .content-area {
-    grid-template-columns: 1fr 1fr;
-  }
-  .center-column {
-    grid-column: 1 / -1;
+@media (min-width: 961px) {
+  .settings-modal-header,
+  .settings-modal-footer {
+    display: none;
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 960px) {
   .content-area {
     display: flex;
     flex-direction: column;
-    padding: 8px;
-    gap: 10px;
+    padding: 10px;
+    gap: 12px;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
   }
-  .mobile-tabs {
-    display: flex;
-  }
-  .left-column, .right-column {
+
+  /* Left Column: Slid-over Settings Drawer */
+  .left-column {
     display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 88%;
+    max-width: 380px;
+    background-color: var(--card-bg);
+    z-index: 1001;
+    overflow-y: auto;
+    box-shadow: -6px 0 24px rgba(0, 0, 0, 0.5);
+    border-left: 1px solid var(--border);
+    padding: 16px;
+    gap: 12px;
   }
-  .left-column.active-tab, .right-column.active-tab {
+  .left-column.modal-open {
     display: flex;
+    animation: slideInRight 0.22s ease-out;
   }
+
+  /* Right Column: Always Open on Main Screen */
+  .right-column {
+    display: flex;
+    width: 100%;
+  }
+
   .grid-board {
     max-width: 100%;
     max-height: calc(100dvh - 280px);
   }
   .board-container {
     padding: 10px;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
   }
 }

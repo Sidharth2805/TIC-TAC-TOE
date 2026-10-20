@@ -743,26 +743,40 @@
       updateUI();
     });
 
-    // Mobile Segmented Drawer Tabs
-    const tabSettings = document.getElementById('tabSettings');
-    const tabStats = document.getElementById('tabStats');
+    // Settings Drawer / Modal Handlers
     const leftCol = document.getElementById('leftCol');
-    const rightCol = document.getElementById('rightCol');
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const btnHeaderSettings = document.getElementById('btnHeaderSettings');
+    const btnActionSettings = document.getElementById('btnActionSettings');
+    const btnCloseSettings = document.getElementById('btnCloseSettings');
+    const btnDoneSettings = document.getElementById('btnDoneSettings');
 
-    if (tabSettings && tabStats && leftCol && rightCol) {
-      tabSettings.addEventListener('click', () => {
-        tabSettings.classList.add('active');
-        tabStats.classList.remove('active');
-        leftCol.classList.add('active-tab');
-        rightCol.classList.remove('active-tab');
-      });
-      tabStats.addEventListener('click', () => {
-        tabStats.classList.add('active');
-        tabSettings.classList.remove('active');
-        rightCol.classList.add('active-tab');
-        leftCol.classList.remove('active-tab');
-      });
+    function openSettingsModal() {
+      if (leftCol) leftCol.classList.add('modal-open');
+      if (modalBackdrop) modalBackdrop.classList.add('open');
     }
+
+    function closeSettingsModal() {
+      if (leftCol) leftCol.classList.remove('modal-open');
+      if (modalBackdrop) modalBackdrop.classList.remove('open');
+    }
+
+    if (btnHeaderSettings) btnHeaderSettings.addEventListener('click', openSettingsModal);
+    if (btnActionSettings) btnActionSettings.addEventListener('click', openSettingsModal);
+    if (btnCloseSettings) btnCloseSettings.addEventListener('click', closeSettingsModal);
+    if (btnDoneSettings) btnDoneSettings.addEventListener('click', closeSettingsModal);
+    if (modalBackdrop) modalBackdrop.addEventListener('click', closeSettingsModal);
+
+    // Accordion Sections (Game Rules, Statistics, Move History)
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const item = header.closest('.accordion-item');
+        if (!item) return;
+        const isOpen = item.classList.contains('open');
+        item.classList.toggle('open');
+        header.setAttribute('aria-expanded', !isOpen);
+      });
+    });
 
     // Keyboard Shortcuts (Matching desktop app)
     window.addEventListener('keydown', (e) => {
