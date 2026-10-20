@@ -67,6 +67,7 @@
     theme: 'obsidian',
     soundOn: true,
     power: true,
+    animations: true,
     player1Name: 'Player 1',
     player2Name: 'Player 2',
     player3Name: 'Player 3'
@@ -99,6 +100,9 @@
   try {
     const saved = localStorage.getItem('tictactoe_stats');
     if (saved) Object.assign(stats, JSON.parse(saved));
+    const savedAnim = localStorage.getItem('tictactoe_animations');
+    if (savedAnim !== null) config.animations = savedAnim === 'true';
+    if (!config.animations) document.documentElement.setAttribute('data-animations', 'off');
   } catch (e) {}
 
   function saveStats() {
@@ -648,6 +652,29 @@
       btnPower.innerText = config.power ? 'POWER: ON' : 'POWER: OFF';
       updateUI();
     });
+
+    // Animations Toggle
+    const btnAnimations = document.getElementById('btnAnimations');
+    if (btnAnimations) {
+      btnAnimations.innerText = config.animations ? 'ANIMATIONS: ON' : 'ANIMATIONS: OFF';
+      if (config.animations) {
+        btnAnimations.classList.add('active');
+      } else {
+        btnAnimations.classList.remove('active');
+      }
+      btnAnimations.addEventListener('click', () => {
+        config.animations = !config.animations;
+        try { localStorage.setItem('tictactoe_animations', config.animations); } catch (e) {}
+        btnAnimations.innerText = config.animations ? 'ANIMATIONS: ON' : 'ANIMATIONS: OFF';
+        if (config.animations) {
+          btnAnimations.classList.add('active');
+          document.documentElement.removeAttribute('data-animations');
+        } else {
+          btnAnimations.classList.remove('active');
+          document.documentElement.setAttribute('data-animations', 'off');
+        }
+      });
+    }
 
     // Theme buttons
     document.querySelectorAll('[data-theme-btn]').forEach(btn => {
