@@ -17,14 +17,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Java JDK 23
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '23'
+          cache: 'maven'
 
       - name: Build Executable JAR with Maven
         run: |
-          mvn clean package -DskipTests
+          mvn clean package -DskipTests --batch-mode --errors
           mkdir -p dist-desktop
           cp target/tictactoe-machine-1.0-SNAPSHOT.jar dist-desktop/TicTacToe-Machine-v1.0.jar
 
@@ -42,7 +43,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Java JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '21'
@@ -83,16 +84,19 @@ jobs:
   publish-release:
     name: Publish to GitHub Releases
     needs: [build-desktop, build-android]
+    if: always() && (needs.build-desktop.result == 'success' || needs.build-android.result == 'success')
     runs-on: ubuntu-latest
     steps:
       - name: Download Desktop Artifact
         uses: actions/download-artifact@v4
+        continue-on-error: true
         with:
           name: TicTacToe-Machine-Desktop-JAR
           path: release-files
 
       - name: Download Android APK Artifact
         uses: actions/download-artifact@v4
+        continue-on-error: true
         with:
           name: TicTacToe-Machine-Android-APK
           path: release-files
@@ -112,7 +116,6 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            release-files/TicTacToe-Machine-Android.apk
-            release-files/TicTacToe-Machine-v1.0.jar
+            release-files/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
