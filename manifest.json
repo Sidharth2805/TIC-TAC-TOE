@@ -1,7 +1,7 @@
 {
   "id": "/TIC-TAC-TOE/",
-  "name": "Tic-Tac-Toe Machine",
-  "short_name": "TicTacToe",
+  "name": "TIC-TAC-TOE",
+  "short_name": "TIC-TAC-TOE",
   "description": "Advanced desktop and mobile Tic-Tac-Toe game with Minimax AI, multiple game rules, and multiplayer.",
   "start_url": "/TIC-TAC-TOE/",
   "scope": "/TIC-TAC-TOE/",

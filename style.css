@@ -90,10 +90,10 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px;
+  padding: max(8px, env(safe-area-inset-top)) 16px 8px 16px;
   background-color: var(--term-bg);
   border-bottom: 1px solid var(--border);
-  min-height: 42px;
+  min-height: 44px;
 }
 
 .brand {
@@ -165,18 +165,27 @@ button, .btn {
   font-size: 12px;
   font-weight: 600;
   border-radius: var(--radius);
-  padding: 6px 12px;
+  padding: 7px 12px;
   border: 1px solid var(--border);
   background: transparent;
   color: var(--text);
   cursor: pointer;
   touch-action: manipulation;
-  transition: background-color 0.15s, border-color 0.15s;
+  transition: background-color 0.15s, border-color 0.15s, transform 0.08s;
 }
 
-button:hover:not(:disabled), .btn:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.06);
+button:hover:not(:disabled):not(.active), .btn:hover:not(:disabled):not(.active) {
+  background-color: rgba(255, 255, 255, 0.08);
   border-color: var(--text-dim);
+}
+
+[data-theme="slate-light"] button:hover:not(:disabled):not(.active),
+[data-theme="slate-light"] .btn:hover:not(:disabled):not(.active),
+[data-theme="paper"] button:hover:not(:disabled):not(.active),
+[data-theme="paper"] .btn:hover:not(:disabled):not(.active) {
+  background-color: rgba(0, 0, 0, 0.06);
+  border-color: var(--text-dim);
+  color: var(--text);
 }
 
 button:active:not(:disabled), .btn:active:not(:disabled) {
@@ -189,14 +198,15 @@ button:disabled, .btn:disabled {
 }
 
 .btn-primary {
-  background-color: var(--accent-win);
-  color: var(--term-bg);
-  border-color: var(--accent-win);
+  background-color: var(--accent-win) !important;
+  color: #FFFFFF !important;
+  border-color: var(--accent-win) !important;
   font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 .btn-primary:hover:not(:disabled) {
-  background-color: #059669;
-  border-color: #059669;
+  background-color: #059669 !important;
+  border-color: #059669 !important;
 }
 
 .btn-group {
@@ -205,10 +215,22 @@ button:disabled, .btn:disabled {
   gap: 6px;
 }
 
-.btn-group button.active {
-  background-color: var(--accent-x);
-  color: #FFFFFF;
-  border-color: var(--accent-x);
+/* Selected Active Buttons across all themes */
+.btn-group button.active,
+.btn-group .btn.active,
+button.active,
+.btn.active {
+  background-color: var(--accent-x) !important;
+  color: #FFFFFF !important;
+  border-color: var(--accent-x) !important;
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.3);
+}
+
+.btn-group button.active:hover,
+button.active:hover {
+  background-color: var(--accent-x) !important;
+  color: #FFFFFF !important;
 }
 
 /* Inputs */
@@ -335,7 +357,7 @@ input[type="text"]:disabled {
 
 .grid-board {
   display: grid;
-  gap: 6px;
+  gap: 8px;
   width: 100%;
   aspect-ratio: 1 / 1;
   max-width: 480px;
@@ -350,33 +372,75 @@ input[type="text"]:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(20px, 6vw, 42px);
+  font-size: clamp(48px, 14vw, 84px);
   font-weight: 900;
+  line-height: 1;
   cursor: pointer;
   touch-action: manipulation;
   user-select: none;
-  transition: background-color 0.12s, border-color 0.12s, transform 0.08s;
+  transition: background-color 0.14s, border-color 0.14s, transform 0.1s, box-shadow 0.14s;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.22), 0 1px 2px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+/* Dynamic font-size scaling tailored to board dimensions */
+.grid-board[data-grid-size="3"] .cell {
+  font-size: clamp(52px, 15vw, 88px);
+}
+.grid-board[data-grid-size="4"] .cell {
+  font-size: clamp(38px, 11vw, 62px);
+}
+.grid-board[data-grid-size="5"] .cell {
+  font-size: clamp(28px, 8.5vw, 46px);
+}
+.grid-board[data-grid-size="9"] .cell {
+  font-size: clamp(14px, 4.2vw, 22px);
 }
 
 .cell:hover:not(:disabled):not(.filled):not(.hazard) {
   border-color: var(--accent-x);
-  background-color: rgba(37, 99, 235, 0.08);
+  background-color: rgba(37, 99, 235, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
 }
 
 .cell:active:not(:disabled) {
-  transform: scale(0.97);
+  transform: scale(0.96);
+}
+
+/* Mark pop-in tactile animation */
+@keyframes markPop {
+  0% {
+    transform: scale(0.35) rotate(-6deg);
+    opacity: 0;
+  }
+  75% {
+    transform: scale(1.12) rotate(2deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+.cell.filled {
+  animation: markPop 0.16s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .cell.symbol-x {
   color: var(--accent-x);
+  text-shadow: 0 0 14px rgba(37, 99, 235, 0.35);
 }
 
 .cell.symbol-o {
   color: var(--accent-o);
+  text-shadow: 0 0 14px rgba(225, 29, 72, 0.35);
 }
 
 .cell.symbol-delta {
   color: var(--accent-p3);
+  text-shadow: 0 0 14px rgba(16, 185, 129, 0.35);
 }
 
 .cell.hazard {
@@ -384,12 +448,28 @@ input[type="text"]:disabled {
   background-color: var(--hazard-bg);
   color: var(--hazard-border);
   cursor: not-allowed;
+  box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.25);
+}
+
+/* Winning cell neon pulse animation */
+@keyframes winPulse {
+  0%, 100% {
+    background-color: rgba(16, 185, 129, 0.25);
+    border-color: var(--accent-win);
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4), inset 0 0 10px rgba(16, 185, 129, 0.2);
+  }
+  50% {
+    background-color: rgba(16, 185, 129, 0.42);
+    border-color: #34D399;
+    box-shadow: 0 0 22px rgba(16, 185, 129, 0.7), inset 0 0 16px rgba(16, 185, 129, 0.4);
+  }
 }
 
 .cell.winning-cell {
-  background-color: rgba(16, 185, 129, 0.22);
-  border-color: var(--accent-win);
-  color: var(--accent-win);
+  animation: winPulse 1.2s infinite ease-in-out;
+  color: var(--accent-win) !important;
+  font-weight: 900;
+  z-index: 2;
 }
 
 /* Right Column (Actions, Rules, Stats, History) */
@@ -555,13 +635,13 @@ input[type="text"]:disabled {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 16px;
+  padding: 4px 16px max(4px, env(safe-area-inset-bottom)) 16px;
   background-color: var(--term-bg);
   border-top: 1px solid var(--border);
   font-size: 10px;
   font-weight: 700;
   color: var(--text-dim);
-  min-height: 26px;
+  min-height: 28px;
 }
 .status-left, .status-right {
   display: flex;

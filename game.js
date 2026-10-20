@@ -502,6 +502,7 @@
     if (!grid) return;
     grid.innerHTML = '';
     grid.style.gridTemplateColumns = `repeat(${config.gridSize}, 1fr)`;
+    grid.setAttribute('data-grid-size', config.gridSize);
 
     for (let i = 0; i < state.board.length; i++) {
       const cell = document.createElement('div');

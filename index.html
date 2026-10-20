@@ -2,15 +2,15 @@
 <html lang="en" data-theme="obsidian">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TIC-TAC-TOE MACHINE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>TIC-TAC-TOE</title>
   <meta name="description" content="Advanced desktop and mobile Tic-Tac-Toe game with Minimax AI, multiple game rules, and multiplayer.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#0F172A">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="TicTacToe">
+  <meta name="apple-mobile-web-app-title" content="TIC-TAC-TOE">
   <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -20,7 +20,7 @@
     <header class="top-bar">
       <div class="brand">
         <span class="status-dot"></span>
-        <span>TIC-TAC-TOE MACHINE</span>
+        <span>TIC-TAC-TOE</span>
       </div>
       <div class="top-actions">
         <button id="btnHeaderSettings" class="btn btn-settings-header" title="Open Settings" aria-label="Settings">
@@ -145,9 +145,6 @@
           <button id="btnUndo" class="btn" style="flex:1;">UNDO</button>
           <button id="btnRedo" class="btn" style="flex:1;">REDO</button>
         </div>
-        <button id="btnActionSettings" class="btn" style="width:100%; padding:8px; display:flex; align-items:center; justify-content:center; gap:6px; font-weight:700;">
-          <span>⚙️ CONFIGURE SETTINGS</span>
-        </button>
 
         <!-- ACCORDION: GAME RULES -->
         <div class="accordion-item open" id="accordionRules">
